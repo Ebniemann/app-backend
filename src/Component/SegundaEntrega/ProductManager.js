@@ -15,7 +15,15 @@ class ProductManager {
   addProduct(title, description, price, thumbnail, code, stock) {
     let products = this.getProduct();
     let codeUnique = products.some((prod) => prod.code === code);
-    if (!codeUnique) {
+    if (
+      !codeUnique &&
+      title &&
+      description &&
+      price &&
+      thumbnail.match(/\.(jpeg|jpg|gif|png)$/) &&
+      code &&
+      stock
+    ) {
       let id = 1;
 
       if (products.length > 0) {
@@ -30,7 +38,7 @@ class ProductManager {
   getProductById(id) {
     let products = this.getProduct();
     if (!products.find((prod) => prod.id === id)) {
-      console.log("id inexistente");
+      console.log("ID INEXISTENTE 🙀");
     } else {
       console.log(products.find((prod) => prod.id === id));
     }
@@ -40,13 +48,13 @@ class ProductManager {
     let products = this.getProduct();
     let productById = products.findIndex((prod) => prod.id === id);
     if (productById === -1) {
-      return "id inexistente";
+      return "ID INEXISTENTE 🙀";
     } else {
       if (updateData.id && updateData.id !== id) {
-        console.log("No se puede editar el ID del producto");
+        console.log("OPSSS❗️❗️❗️ NO SE PUEDE EDITAR EL ID DEL PRODUCTO ❌ ");
       } else {
         products[productById] = { ...products[productById], ...updateData };
-        console.log("Producto editado");
+        console.log("PRODUCTO EDITADO CON ÉXITO 🎉 🎊 ");
       }
     }
     fs.writeFileSync(this.path, JSON.stringify(products, null, 4));
@@ -61,7 +69,7 @@ class ProductManager {
       fs.writeFileSync(this.path, JSON.stringify(deletById, null, 4));
       return deletById;
     } else {
-      console.log("No se encontro el producto con ese ID");
+      console.log("NO SE ENCONTRO UN PRODUCTO CON ESE ID 👀 😬");
       return null;
     }
   }
@@ -85,12 +93,23 @@ productManager.addProduct(
   "2",
   "20"
 );
+
+//sin descripcion
+productManager.addProduct(
+  "Lentes recetados",
+  2000,
+  "img/sunglasses.jpg",
+  "2",
+  "20"
+);
 console.log(productManager.getProduct());
 
-productManager.getProductById(2);
+productManager.getProductById(3);
 
-productManager.updateProduct(1, {
+//updateProduct editando id
+productManager.updateProduct(2, {
   title: "niños",
+  id: 99999,
   description: "son de ninos",
   price: 99999,
   thumbnail: "img/sunglassesNiños.png",
@@ -99,5 +118,5 @@ productManager.updateProduct(1, {
 });
 console.log(productManager.getProduct());
 
-productManager.deletProduct(1);
+productManager.deletProduct(4);
 console.log(productManager.getProduct());
