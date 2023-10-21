@@ -1,55 +1,73 @@
-const fs = require("fs").promises;
+const fs = require("fs");
 class ProductManager {
-  constructor() {
-    this.path = "./archivo.txt";
-    this.products = [];
+  constructor(ruta) {
+    this.path = ruta;
+  }
+  getProduct() {
+    if (fs.existsSync(this.path)) {
+      const data = fs.readFileSync(this.path, "utf-8");
+      return JSON.parse(data);
+    } else {
+      return [];
+    }
   }
 
-  addProduct = async (title, description, price, thumbnail, code, stock) => {
-    let id = 1;
+  addProduct(title, description, price, thumbnail, code, stock) {
+    let products = this.getProduct();
+    let codeUnique = products.some((prod) => prod.code === code);
+    if (!codeUnique) {
+      let id = 1;
 
-    if (this.products.length > 0) {
-      id = this.products[this.products.length - 1].id + 1;
+      if (products.length > 0) {
+        id = products[products.length - 1].id + 1;
+      }
+      products.push({ id, title, description, price, thumbnail, code, stock });
+
+      fs.writeFileSync(this.path, JSON.stringify(products, null, 4));
     }
-    let product = {
-      id,
-      title,
-      description,
-      price,
-      thumbnail,
-      code,
-      stock,
-    };
-    this.products.push(product);
+  }
 
-    try {
-      await fs.writeFile(this.path, JSON.stringify(this.products));
-    } catch (error) {
-      console.error(error.message);
-    }
-  };
-
-  getProduct = async () => {
-    try {
-      let lectura = await fs.readFile(this.path, "utf-8");
-      console.log(JSON.parse(lectura));
-    } catch (error) {
-      console.error(error.message);
-    }
-  };
-
-  getProductById = async (id) => {
-    const data = await fs.readFile(this.path, "utf-8");
-    const products = JSON.parse(data);
+  getProductById(id) {
+    let products = this.getProduct();
     if (!products.find((prod) => prod.id === id)) {
       console.log("id inexistente");
     } else {
       console.log(products.find((prod) => prod.id === id));
     }
-  };
+  }
+
+  updateProduct(id, updateData) {
+    let products = this.getProduct();
+    let productById = products.findIndex((prod) => prod.id === id);
+    if (productById === -1) {
+      return "id inexistente";
+    } else {
+      if (updateData.id && updateData.id !== id) {
+        console.log("No se puede editar el ID del producto");
+      } else {
+        products[productById] = { ...products[productById], ...updateData };
+        console.log("Producto editado");
+      }
+    }
+    fs.writeFileSync(this.path, JSON.stringify(products, null, 4));
+  }
+
+  deletProduct(id) {
+    let products = this.getProduct();
+
+    let deletById = products.filter((prod) => prod.id !== id);
+
+    if (deletById.length < products.length) {
+      fs.writeFileSync(this.path, JSON.stringify(deletById, null, 4));
+      return deletById;
+    } else {
+      console.log("No se encontro el producto con ese ID");
+      return null;
+    }
+  }
 }
 
-let productManager = new ProductManager();
+let productManager = new ProductManager("./archivo.json");
 productManager.addProduct(
   "Lentes de Sol Mujer",
   "Estos nuevos modelos unisex",
@@ -67,6 +85,19 @@ productManager.addProduct(
   "2",
   "20"
 );
+console.log(productManager.getProduct());
 
-productManager.getProduct();
-productManager.getProductById(3);
+productManager.getProductById(2);
+
+productManager.updateProduct(1, {
+  title: "niños",
+  description: "son de ninos",
+  price: 99999,
+  thumbnail: "img/sunglassesNiños.png",
+  code: "1",
+  stock: "30",
+});
+console.log(productManager.getProduct());
+
+productManager.deletProduct(1);
+console.log(productManager.getProduct());
