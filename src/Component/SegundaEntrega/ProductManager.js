@@ -1,4 +1,16 @@
 const fs = require("fs");
+const http = require("http");
+
+const PORT = 8080;
+const server = http.createServer((req, res) => {
+  res.writeHead(200, { "Content-Type": "text/html; charset=utf8" });
+  res.end("hola mundo");
+});
+
+server.listen(PORT, () => {
+  console.log("escucha el puerto 8080");
+});
+
 class ProductManager {
   constructor(ruta) {
     this.path = ruta;
