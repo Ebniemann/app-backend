@@ -76,6 +76,8 @@ class ProductManager {
   }
 }
 
+module.exports = ProductManager;
+
 let productManager = new ProductManager("./archivo.json");
 productManager.addProduct(
   "Lentes de Sol Mujer",
@@ -94,30 +96,94 @@ productManager.addProduct(
   "2",
   "20"
 );
-
-//sin descripcion
 productManager.addProduct(
-  "Lentes recetados",
-  2000,
-  "img/sunglasses.jpg",
-  "2",
+  "Remeras",
+  "Modelos unisex",
+  40,
+  "img/remeras.jpg",
+  "3",
   "20"
 );
-console.log(productManager.getProduct());
+productManager.addProduct(
+  "Zapatillas",
+  "Modelos unisex",
+  30,
+  "img/zapatillas.jpg",
+  "4",
+  "20"
+);
+productManager.addProduct(
+  "Zapatos para mujer",
+  "Modelos damas",
+  5000,
+  "img/sunglasses.jpg",
+  "5",
+  "20"
+);
+productManager.addProduct(
+  "Zapatilla infantil",
+  "Modelos unisex",
+  100,
+  "img/zapatilla-infantil.jpg",
+  "6",
+  "20"
+);
+productManager.addProduct(
+  "Mochilas",
+  "Modelos unisex",
+  70,
+  "img/mochilas.jpg",
+  "7",
+  "20"
+);
+productManager.addProduct(
+  "Carteras",
+  "Modelos dama",
+  90,
+  "img/cartera.jpg",
+  "8",
+  "20"
+);
+productManager.addProduct(
+  "Accesorio hombre",
+  "Accesorios masculinos",
+  80,
+  "img/accesorio-masculino.jpg",
+  "9",
+  "20"
+);
+productManager.addProduct(
+  "Accesorios damas",
+  "Accesorio dama",
+  776,
+  "img/accesorio-dama.jpg",
+  "10",
+  "20"
+);
 
-productManager.getProductById(3);
+//sin descripcion
+// productManager.addProduct(
+//   "Lentes recetados",
+//   2000,
+//   "img/sunglasses.jpg",
+//   "2",
+//   "20"
+// );
+// console.log(productManager.getProduct());
+
+// productManager.getProductById(3);
 
 //updateProduct editando id
-productManager.updateProduct(2, {
-  title: "niños",
-  id: 99999,
-  description: "son de ninos",
-  price: 99999,
-  thumbnail: "img/sunglassesNiños.png",
-  code: "1",
-  stock: "30",
-});
-console.log(productManager.getProduct());
+// productManager.updateProduct(2, {
+//   title: "niños",
+//   id: 99999,
+//   description: "son de ninos",
+//   price: 99999,
+//   thumbnail: "img/sunglassesNiños.png",
+//   code: "1",
+//   stock: "30",
+// });
+// console.log(productManager.getProduct());
 
-productManager.deletProduct(4);
-console.log(productManager.getProduct());
+// productManager.deletProduct(4);
+// console.log(productManager.getProduct());
